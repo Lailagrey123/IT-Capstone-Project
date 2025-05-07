@@ -1,0 +1,61 @@
+-- Create Users Table
+CREATE TABLE Users (
+    user_id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(50) NOT NULL UNIQUE,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    password_hash VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+-- Create Income Table
+CREATE TABLE Income (
+    income_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    source VARCHAR(100) NOT NULL,
+    amount DECIMAL(10,2) NOT NULL,
+    received_date DATE NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE
+);
+
+-- Create Expenses Table
+CREATE TABLE Expenses (
+    expense_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    category VARCHAR(50) NOT NULL,
+    description TEXT,
+    amount DECIMAL(10,2) NOT NULL,
+    expense_date DATE NOT NULL,
+    is_recurring BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE
+);
+
+-- Create Bills Table
+CREATE TABLE Bills (
+    bill_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    bill_name VARCHAR(100) NOT NULL,
+    amount DECIMAL(10,2) NOT NULL,
+    due_date DATE NOT NULL,
+    is_paid BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE
+);
+
+-- Create Savings Goals Table
+CREATE TABLE SavingsGoals (
+    goal_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    goal_name VARCHAR(100) NOT NULL,
+    target_amount DECIMAL(10,2) NOT NULL,
+    current_amount DECIMAL(10,2) DEFAULT 0.00,
+    deadline DATE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE
+);
